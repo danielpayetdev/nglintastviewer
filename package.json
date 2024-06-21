@@ -1,7 +1,7 @@
 {
   "name": "ng-lint-ast-viewer",
   "displayName": "Ng lint ast viewer",
-  "description": "Show angular-eslint ast tree",
+  "description": "Show ast tree for angular project",
   "repository": {
     "url": "https://github.com/danielpayetdev/nglintastviewer"
   },

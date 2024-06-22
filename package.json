@@ -5,6 +5,7 @@
   "repository": {
     "url": "https://github.com/danielpayetdev/nglintastviewer"
   },
+  "publisher": "danielpayet",
   "version": "0.0.2",
   "engines": {
     "vscode": "^1.90.0"

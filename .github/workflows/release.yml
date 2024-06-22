@@ -29,4 +29,4 @@ jobs:
           file_glob: true
           tag: ${{ github.ref }}
           overwrite: true
-      - run: git push
+      - run: git push origin HEAD:main

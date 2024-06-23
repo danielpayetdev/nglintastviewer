@@ -29,7 +29,9 @@ jobs:
           file_glob: true
           tag: ${{ github.ref }}
           overwrite: true
-      - name: Publish
-        run: npm run deploy
+      - name: Publish to microsoft marketplace
+        run: npm run deploy:ms
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      - name: Publish to eclipse marketplace
+        run: npm run deploy:eclipse -- -p ${{ secrets.OPEN_VSX_PAT }}

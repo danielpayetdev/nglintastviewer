@@ -62,13 +62,14 @@ const keyOrder: Record<string, number> = {
   branches: 1,
   children: 1,
   expression: 2,
+  expressions: 2,
   expressionAlias: 3,
   i18n: 4,
 };
 
 const buildTree = (ast: Record<string, any>): string => {
   return (
-    "<ul style='padding:.5rem'>" +
+    "<ul>" +
     Object.keys(ast)
       .sort((key1, key2) => {
         const key1Order = keyOrder[key1] ?? 100;
@@ -77,7 +78,7 @@ const buildTree = (ast: Record<string, any>): string => {
       })
       .map((key) => {
         return `
-		<li>
+		<li style='padding-top:.5rem;padding-bottom:.5rem'>
 			${
         ast[key] &&
         typeof ast[key] === "object" &&

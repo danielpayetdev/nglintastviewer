@@ -1,5 +1,9 @@
 @if(toto){
     hello
+    prout
+    @for(t of p; track $index){
+        {{ t }}
+    }
 } @else {
     bonjour
 }

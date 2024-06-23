@@ -10,8 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,7 +33,3 @@ jobs:
         run: npm run deploy
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          branch: main
-          commit_message: Release ${{  github.ref_name }}

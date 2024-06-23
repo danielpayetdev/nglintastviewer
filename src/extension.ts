@@ -19,7 +19,10 @@ export function activate(context: vscode.ExtensionContext) {
         "AST " +
           path.parse(vscode.window.activeTextEditor?.document.fileName ?? "")
             .base,
-        vscode.ViewColumn.Beside
+        vscode.ViewColumn.Beside,
+        {
+          enableScripts: true
+        }
       );
 
       webView.webview.html = buildHtml(ast);
@@ -69,7 +72,7 @@ const keyOrder: Record<string, number> = {
 
 const buildTree = (ast: Record<string, any>): string => {
   return (
-    "<ul>" +
+    "<ul'>" +
     Object.keys(ast)
       .sort((key1, key2) => {
         const key1Order = keyOrder[key1] ?? 100;
@@ -78,7 +81,7 @@ const buildTree = (ast: Record<string, any>): string => {
       })
       .map((key) => {
         return `
-		<li style='padding-top:.5rem;padding-bottom:.5rem'>
+		<li style='padding:.5rem;border-left:1px solid grey;' onmouseover="this.style.borderLeftColor='white'" onmouseout="this.style.borderLeftColor='grey'" >
 			${
         ast[key] &&
         typeof ast[key] === "object" &&
@@ -88,7 +91,17 @@ const buildTree = (ast: Record<string, any>): string => {
 				<summary>${key}: ${getNodeValue(ast[key])}</summary>
 				${buildSubTree(ast[key])}
 			</details>`
-          : `${key}: ${getNodeValue(ast[key])}`
+          : ast[key] &&
+              typeof ast[key] === "string" &&
+              (ast[key] as string).includes("<")
+            ? `
+			<details>
+				<summary>${key}: ${escapeHTML(getNodeValue(ast[key])).slice(0, 100)}...</summary>
+				<code>
+          ${escapeHTML(ast[key])}
+        </code>
+			</details>`
+            : `${key}: ${getNodeValue(ast[key])}`
       }
 			
 		</li>`;
@@ -96,6 +109,15 @@ const buildTree = (ast: Record<string, any>): string => {
       .join("") +
     "</ul>"
   );
+};
+
+const escapeHTML = (html: string): string => {
+  return html
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll("'", "&#39;")
+    .replaceAll('"', "&quot;");
 };
 
 const buildSubTree = (node: any) => {

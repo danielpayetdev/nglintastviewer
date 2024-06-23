@@ -10,8 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,7 +35,3 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
       - name: Publish to eclipse marketplace
         run: npm run deploy:eclipse -- -p ${{ secrets.OPEN_VSX_PAT }}
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          branch: main
-          commit_message: Release ${{  github.ref_name }}

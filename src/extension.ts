@@ -88,7 +88,17 @@ const buildTree = (ast: Record<string, any>): string => {
 				<summary>${key}: ${getNodeValue(ast[key])}</summary>
 				${buildSubTree(ast[key])}
 			</details>`
-          : `${key}: ${getNodeValue(ast[key])}`
+          : ast[key] &&
+              typeof ast[key] === "string" &&
+              (ast[key] as string).includes("<")
+            ? `
+			<details>
+				<summary>${key}: ${escapeHTML(getNodeValue(ast[key])).slice(0, 100)}...</summary>
+				<code>
+          ${escapeHTML(ast[key])}
+        </code>
+			</details>`
+            : `${key}: ${getNodeValue(ast[key])}`
       }
 			
 		</li>`;
@@ -96,6 +106,15 @@ const buildTree = (ast: Record<string, any>): string => {
       .join("") +
     "</ul>"
   );
+};
+
+const escapeHTML = (html: string): string => {
+  return html
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll("'", "&#39;")
+    .replaceAll('"', "&quot;");
 };
 
 const buildSubTree = (node: any) => {
